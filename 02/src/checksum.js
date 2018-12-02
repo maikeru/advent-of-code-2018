@@ -1,6 +1,5 @@
 const getCountsPerLetter = ids => {
   const letters = ids.split("");
-  console.log("letters", letters);
   const counts = {};
   letters.forEach(letter => {
     counts[letter] = (counts[letter] ? counts[letter] : 0) + 1;
@@ -8,24 +7,29 @@ const getCountsPerLetter = ids => {
   return counts;
 };
 
+const hasDoubleLetter = counts => {
+  return (
+    Object.entries(counts).filter(([letter, count]) => {
+      return count === 2;
+    }).length > 0
+  );
+};
+
+const hasTripleLetter = counts => {
+  return (
+    Object.entries(counts).filter(([letter, count]) => {
+      return count === 3;
+    }).length > 0
+  );
+};
+
 const getCounts = (ids = []) => {
   let numberOfTwos = 0;
   let numberOfThrees = 0;
   ids.forEach(id => {
     const counts = getCountsPerLetter(id);
-    let numberOfTwosForId = 0;
-    let numberOfThreesForId = 0;
-    console.log("counts", counts);
-    Object.entries(counts).forEach(([countKey, count]) => {
-      if (count === 2) {
-        numberOfTwosForId = 1; // only count once
-      }
-      if (count === 3) {
-        numberOfThreesForId = 1; // only count once
-      }
-    });
-    numberOfTwos += numberOfTwosForId;
-    numberOfThrees += numberOfThreesForId;
+    numberOfTwos += hasDoubleLetter(counts);
+    numberOfThrees += hasTripleLetter(counts);
   });
   return { numberOfTwos, numberOfThrees };
 };
